@@ -3,9 +3,11 @@
 ## 1. Noções básicas de base de dados
 
 ### 1.1 Dados
+
 São os elementos básicos pertencentes a um conjunto determinado de informações.
 
 ### 1.2 Informação
+
 É o resultado da aplicação de um conjunto de operações sobre os dados.
 
 ### 1.3 Base de dados
@@ -19,6 +21,7 @@ Em sistemas computacionais, bases de dados são gerenciadas por um sistema geren
 É um software com recursos específicos para facilitar a gerenciamento de dados em bases de dados, como exemplo: Oracle, MySQL, SQL Server, etc…
 
 #### 1.3.2 Database Administrator (DBA)
+
 É a pessoa que cria e  gere a base de dados. O administrador da base de dados, pode não ser um programador.
 
 #### 1.3.3 Características de uma Base de Dados
@@ -51,10 +54,30 @@ Para construirmos eficientemente uma base dados recomenda-se as seguintes fase:
 - Modelo Lógico
 - Modelo Físico
 
-**Análise**: nesta fase, devemos como DBA identificar ou descrever os dados/informações e processos pretendidos pela organização;
+**Análise de requisitos**: nesta fase, devemos como DBA identificar ou descrever os dados/informações e processos pretendidos pela organização;
 
 **Modelo conceptual**: nesta fase, nos baseamos na  representação da realidade, sem termos em conta os aspectos técnicos, ou seja, nesta fase não importa ainda a tecnologia ou o tipo de banco de dados a se utilizar;
 
 **Modelo lógico**: esta fase agrega mais detalhes sobre a implementação da base de dados. Nesta da fase transformamos o modelo conceptual em um modelo que fica muito próximo ao modelo físico da base de dados;
 
 **Modelo físico**: este modelo consiste em definir estruturas físicas de dados que sejam mais adequadas num ambiente informático particular. 
+
+#### 1.4.1 Análise de requisitos
+
+Na fase de análise de requisitos devemos ter o grande foco em obter as:
+- Informações que descrevem as estruturas de dados, tais como as entidades, atributos e as associações;
+- Informação que descreva as regras ou restrições que preservem a integridade dos dados;
+- Informação acerca dos processos operacionais e de gestão necessários ao negócio da organização;
+- Informações das necessidades e requisitos dos utilizadores.
+
+Existem vários métodos ou técnicas para levantamento de requisitos, as mais conhecidas são:
+- Documentação;
+- Observação;
+- Entrevista.
+
+Os principais elementos do modelo conceptual são:
+- Entidade;
+- Atributo;
+- Associação;
+- Entidade Associativa;
+- Generalização.
