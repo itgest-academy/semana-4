@@ -44,7 +44,7 @@ Dentre as grandes vantagens em usar uma base de dados, destacam-se as seguintes:
 - Facilitar o backup e recuperação à falhas;
 - Fortificar a partilha de dados.
 
-### 1.4 fases para a construção de uma base de Dados
+### 1.4 Fases para a construção de uma base de Dados
 
 Ao criarmos uma base de dados num SGBD, antes devemos ter em conta alguns procedimentos, procedimentos estes que facilitarão o desenho, bem como a estrutura da base de dados.
 
