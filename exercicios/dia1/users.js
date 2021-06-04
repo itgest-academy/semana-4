@@ -1,47 +1,77 @@
 const users = []
 
-module.exports = (app) => {
+module.exports = (app, connection) => {
   app.get('/users', (_, res) => {
-    res.send({
-      code: 200,
-      meta: {
-        pagination: {
-          total: users.length,
-          pages: 1,
-          page: 1,
-          limit: undefined,
-        }
-      },
-      data: users
+    connection.query('SELECT * FROM users', (error, results, _) => {
+      if (error) {
+        throw error
+      }
+
+      res.send({
+        code: 200,
+        meta: {
+          pagination: {
+            total: results.length,
+            pages: 1,
+            page: 1,
+            limit: undefined,
+          }
+        },
+        data: results,
+      })
     })
   })
 
   app.get('/users/:id', (req, res) => {
-    const user = users.find((user) => user.id == req.params.id)
+    const { id } = req.params
 
-    res.send(user)
+    connection.query('SELECT * FROM users WHERE id = ? LIMIT 1', [id], (error, results, _) => {
+      if (error) {
+        throw error
+      }
+
+      res.send(results[0])
+    })
   })
 
   app.post('/users', (req, res) => {
     const user = req.body
 
-    user.id = users.length + 1
+    connection.query('INSERT INTO users SET ?', [user], (error, results, _) => {
+      if (error) {
+        throw error
+      }
 
-    users.push(user)
+      const { insertId } = results
 
-    res.send(user)
+      connection.query('SELECT * FROM users WHERE id = ? LIMIT 1', [insertId], (error, results, _) => {
+        if (error) {
+          throw error
+        }
+
+        res.send(results[0])
+      })
+    })
   })
 
   app.put('/users/:id', (req, res) => {
     const { id } = req.params
 
-    const data = req.body
+    const user = req.body
 
-    const user = users.find((user) => user.id == id)
+    connection.query('UPDATE users SET ? WHERE id = ?', [user, id], (error, results, _) => {
+      if (error) {
+        throw error
+      }
 
-    Object.assign(user, data)
+      connection.query('SELECT * FROM users WHERE id = ? LIMIT 1', [id], (error, results, _) => {
+        if (error) {
+          throw error
+        }
 
-    res.send(user)
+        res.send(results[0])
+      })
+    })
   })
 
   app.patch('/users/:id/activated', (req, res) => {
