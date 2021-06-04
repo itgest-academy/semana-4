@@ -1,21 +1,35 @@
 module.exports = (app, connection) => {
-  app.get('/users', (_, res) => {
-    connection.query('SELECT * FROM users', (error, results, _) => {
+  app.get('/users', (req, res) => {
+    const { page, limit } = req.query
+
+    connection.query('SELECT COUNT(*) FROM users', (error, results) => {
       if (error) {
         throw error
       }
 
-      res.send({
-        code: 200,
-        meta: {
-          pagination: {
-            total: results.length,
-            pages: 1,
-            page: 1,
-            limit: undefined,
-          }
-        },
-        data: results,
+      const count = results[0]['COUNT(*)']
+      const limitAsNumber = Number(limit)
+      const pageAsNumber = Number(page)
+      const offset = Number((pageAsNumber - 1) * limit)
+
+      connection.query('SELECT * FROM users LIMIT ?, ?', [offset, limitAsNumber], (error, results, _) => {
+        if (error) {
+          throw error
+        }
+
+        const pages = Math.ceil(count / limit)
+
+        res.send({
+          code: 200,
+          meta: {
+            pagination: {
+              total: count,
+              pages: pages,
+              page: pageAsNumber,
+            }
+          },
+          data: results,
+        })
       })
     })
   })
