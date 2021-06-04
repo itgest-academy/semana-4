@@ -1,5 +1,3 @@
-const users = []
-
 module.exports = (app, connection) => {
   app.get('/users', (_, res) => {
     connection.query('SELECT * FROM users', (error, results, _) => {
@@ -79,28 +77,34 @@ module.exports = (app, connection) => {
 
     const { isActive } = req.body
 
-    const user = users.find((user) => user.id == id)
+    const status = isActive ? 1 : 0
 
-    if (isActive) {
-      user.status = 'Active'
-    } else {
-      user.status = 'Inactive'
-    }
+    connection.query('UPDATE users SET status = ? WHERE id = ?', [status, id], (error, results, _) => {
+      if (error) {
+        throw error
+      }
 
-    res.send(user)
+      res.send(isActive)
+    })
   })
 
   app.delete('/users/:id', (req, res) => {
     const { id } = req.params
 
-    const userIndex = users.findIndex((user) => user.id == id)
+    connection.query('SELECT * FROM users WHERE id = ?', [id], (error, results, _) => {
+      if (error) {
+        throw error
+      }
 
-    const user = users[userIndex]
+      const [user] = results
 
-    if (userIndex !== -1) {
-      users.splice(userIndex, 1)
-    }
+      connection.query('DELETE FROM users WHERE id = ?', [id], (error, _, __) => {
+        if (error) {
+          throw error
+        }
 
-    res.send(user)
+        res.send(user)
+      })
+    })
   })
 }
