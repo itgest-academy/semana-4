@@ -21,14 +21,14 @@ module.exports = (app) => {
 
     res.send(todos.find((todo) => todo.id == id))
   })
-  
+
   app.post('/todos', (req, res) => {
     const todo = req.body
-    
+
     todo.id = todos.length + 1
-    
+
     todos.push(todo)
-    
+
     res.send(todo)
   })
 }
