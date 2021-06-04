@@ -1,3 +1,4 @@
+const mysql = require('mysql2')
 const express = require('express')
 const bodyParser = require('body-parser')
 
@@ -11,15 +12,28 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-users(app)
-todos(app)
-
-app.get('/welcome', (req, res) => {
-  const { name } = req.query
-
-  res.send(`Welcome ${name} :)`)
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'T24CF9Ng0p8G#7Sw',
+  database: 'notes_app',
 })
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`)
+connection.connect((error) => {
+  if (error) {
+    throw error
+  }
+
+  users(app, connection)
+  todos(app, connection)
+
+  app.get('/welcome', (req, res) => {
+    const { name } = req.query
+
+    res.send(`Welcome ${name} :)`)
+  })
+
+  app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`)
+  })
 })
