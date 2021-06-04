@@ -1,77 +1,47 @@
 const users = []
 
-module.exports = (app, connection) => {
+module.exports = (app) => {
   app.get('/users', (_, res) => {
-    connection.query('SELECT * FROM users', (error, results, _) => {
-      if (error) {
-        throw error
-      }
-
-      res.send({
-        code: 200,
-        meta: {
-          pagination: {
-            total: results.length,
-            pages: 1,
-            page: 1,
-            limit: undefined,
-          }
-        },
-        data: results,
-      })
+    res.send({
+      code: 200,
+      meta: {
+        pagination: {
+          total: users.length,
+          pages: 1,
+          page: 1,
+          limit: undefined,
+        }
+      },
+      data: users
     })
   })
 
   app.get('/users/:id', (req, res) => {
-    const { id } = req.params
+    const user = users.find((user) => user.id == req.params.id)
 
-    connection.query('SELECT * FROM users WHERE id = ? LIMIT 1', [id], (error, results, _) => {
-      if (error) {
-        throw error
-      }
-
-      res.send(results[0])
-    })
+    res.send(user)
   })
 
   app.post('/users', (req, res) => {
     const user = req.body
 
-    connection.query('INSERT INTO users SET ?', [user], (error, results, _) => {
-      if (error) {
-        throw error
-      }
+    user.id = users.length + 1
 
-      const { insertId } = results
+    users.push(user)
 
-      connection.query('SELECT * FROM users WHERE id = ? LIMIT 1', [insertId], (error, results, _) => {
-        if (error) {
-          throw error
-        }
-
-        res.send(results[0])
-      })
-    })
+    res.send(user)
   })
 
   app.put('/users/:id', (req, res) => {
     const { id } = req.params
 
-    const user = req.body
+    const data = req.body
 
-    connection.query('UPDATE users SET ? WHERE id = ?', [user, id], (error, results, _) => {
-      if (error) {
-        throw error
-      }
+    const user = users.find((user) => user.id == id)
 
-      connection.query('SELECT * FROM users WHERE id = ? LIMIT 1', [id], (error, results, _) => {
-        if (error) {
-          throw error
-        }
+    Object.assign(user, data)
 
-        res.send(results[0])
-      })
-    })
+    res.send(user)
   })
 
   app.patch('/users/:id/activated', (req, res) => {
