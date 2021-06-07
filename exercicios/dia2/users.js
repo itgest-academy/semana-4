@@ -8,11 +8,13 @@ module.exports = (app, connection) => {
       }
 
       const count = results[0]['COUNT(*)']
-      const limitAsNumber = Number(limit)
-      const pageAsNumber = Number(page)
-      const offset = Number((pageAsNumber - 1) * limit)
 
-      connection.query('SELECT * FROM users LIMIT ?, ?', [offset, limitAsNumber], (error, results, _) => {
+      const _limit = Number(limit)
+      const _page = Number(page)
+
+      const offset = (_page - 1) * _limit
+
+      connection.query('SELECT * FROM users LIMIT ?, ?', [offset, _limit], (error, results, _) => {
         if (error) {
           throw error
         }
@@ -25,7 +27,7 @@ module.exports = (app, connection) => {
             pagination: {
               total: count,
               pages: pages,
-              page: pageAsNumber,
+              page: _page,
             }
           },
           data: results,

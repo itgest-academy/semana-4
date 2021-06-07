@@ -6,7 +6,7 @@
   "author": "Eleandro Duzentos <eleandro@inbox.ru>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon exercicios/dia3/users.js"
+    "dev": "nodemon exercicios/dia3/validacao_sanitizacao.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
