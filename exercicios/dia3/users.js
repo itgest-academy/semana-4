@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const { validate } = require('indicative/validator')
+const { validate, validations } = require('indicative/validator')
 
 const PORT = 3000
 
@@ -15,13 +15,20 @@ app.post('/users', (req, res) => {
 
   const rules = {
     name: 'required',
+    email: 'required|email',
+    username: 'required|alphaNumeric',
+    phone: [
+      validations.required,
+      validations.regex(['^((\\+|00)\\d{1,3}\\s{1})?\\d{9}$']),
+    ],
   }
 
   validate(data, rules)
     .then((value) => {
-    }).catch((error) => { })
-
-  res.send('Welcome')
+      res.send(value)
+    }).catch((error) => {
+      res.status(400).send(error)
+    })
 })
 
 app.listen(PORT, () => {
