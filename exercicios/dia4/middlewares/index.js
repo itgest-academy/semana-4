@@ -4,9 +4,9 @@ const sqlInjection = require('./sql_injection')
 const xss = require('./xss')
 
 const middlewares = [
+  bodyParser.json(),
   sqlInjection,
   xss,
-  bodyParser.json(),
 ]
 
 module.exports = {
