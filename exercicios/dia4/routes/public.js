@@ -4,7 +4,7 @@ const router = Router()
 
 router.get('/welcome', (req, res) => {
   const { name, age } = req.query
-  
+
   res.send(`Welcome${name ? ' ' + name + ' ' + age : ''}`)
 })
 
