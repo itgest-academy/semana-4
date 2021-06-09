@@ -3,6 +3,10 @@ const db = require('../../db')
 
 const auth = require('../../middlewares/auth')
 
+function removePasswordProperty(object) {
+  delete object.password
+}
+
 router.get('/', auth, (req, res) => {
   const { page, limit } = req.query
 
@@ -48,9 +52,12 @@ router.get('/:id', (req, res) => {
       throw error
     }
 
+    removePasswordProperty(results[0])
+
     res.send(results[0])
-  })
-})
+          removePasswordProperty(results[0])
+
+          res.send(results[0])
 
 router.put('/:id', (req, res) => {
   const { id } = req.params
@@ -67,9 +74,9 @@ router.put('/:id', (req, res) => {
         throw error
       }
 
-      res.send(results[0])
-    })
-  })
+        removePasswordProperty(results[0])
+
+        res.send(results[0])
 })
 
 module.exports = router
