@@ -1,5 +1,6 @@
 const { validate } = require('indicative/validator')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const db = require('../../db')
 
@@ -15,7 +16,17 @@ module.exports = (req, res) => {
         bcrypt.compare(value.password, results[0].password)
           .then((match) => {
             if (match) {
-              res.send((results[0].id + 483274952349).toString())
+              const secret = 'B18fbWIyeU1utFA31mzGaVyzjyL9ZnfP'
+              const data = { id: results[0].id }
+
+              delete results[0].password
+
+              const authToken = jwt.sign(data, secret)
+
+              res.send({
+                user: results[0],
+                token: authToken
+              })
             } else {
               res.status(400).send('Cannot find any account that matches the given username and password')
             }
